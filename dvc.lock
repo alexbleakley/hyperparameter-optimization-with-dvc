@@ -1,0 +1,67 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m src.prepare --config=params.yaml
+    deps:
+    - path: src/prepare.py
+      md5: d0199bd4f994ce8b2783c70993fb7e6d
+      size: 995
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+        prepare:
+          test_size: 0.2
+          trainset_path: data/trainset.csv
+          testset_path: data/testset.csv
+    outs:
+    - path: data/testset.csv
+      md5: 9837a9d5136087f500dd3f43ed4c97d7
+      size: 401141
+    - path: data/trainset.csv
+      md5: 0bca98cbda08b5d98f5ea2c3484c5ea6
+      size: 1606831
+  train:
+    cmd: python -m src.train --config=params.yaml
+    deps:
+    - path: data/trainset.csv
+      md5: 0bca98cbda08b5d98f5ea2c3484c5ea6
+      size: 1606831
+    - path: src/train.py
+      md5: 5a9cd29d3cb8b59d48055beeed00ce43
+      size: 1310
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+        prepare.trainset_path: data/trainset.csv
+        train:
+          alpha: 1
+          l1_ratio: 0.5
+          model_path: models/model.pkl
+    outs:
+    - path: models/model.pkl
+      md5: dc9f06fb47a71a75299a7e42d665cbf5
+      size: 1696
+  evaluate:
+    cmd: python -m src.evaluate --config=params.yaml
+    deps:
+    - path: data/testset.csv
+      md5: 9837a9d5136087f500dd3f43ed4c97d7
+      size: 401141
+    - path: models/model.pkl
+      md5: dc9f06fb47a71a75299a7e42d665cbf5
+      size: 1696
+    - path: src/evaluate.py
+      md5: 88d2b8f031550a975d85de7a85a33826
+      size: 1328
+    params:
+      params.yaml:
+        evaluate:
+          metrics_path: reports/metrics.json
+        prepare.testset_path: data/testset.csv
+        train.model_path: models/model.pkl
+    outs:
+    - path: reports/metrics.json
+      md5: 2752b439e155f7aeec8cbc75143ce990
+      size: 87

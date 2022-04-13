@@ -1,0 +1,38 @@
+stages:
+
+  prepare:
+    cmd: python -m src.prepare --config=params.yaml
+    deps:
+    - src/prepare.py
+    params:
+    - base
+    - prepare
+    outs:
+    - data/trainset.csv
+    - data/testset.csv
+
+  train:
+    cmd: python -m src.train --config=params.yaml
+    deps:
+    - data/trainset.csv
+    - src/train.py
+    params:
+    - base
+    - prepare.trainset_path
+    - train
+    outs:
+    - models/model.pkl
+  
+  evaluate:
+    cmd: python -m src.evaluate --config=params.yaml
+    deps:
+    - data/testset.csv
+    - models/model.pkl
+    - src/evaluate.py
+    params:
+    - prepare.testset_path
+    - train.model_path
+    - evaluate
+    metrics:
+    - reports/metrics.json
+  
