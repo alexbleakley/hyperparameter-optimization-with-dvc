@@ -37,16 +37,16 @@ stages:
         prepare.trainset_path: data/trainset.csv
         train:
           alpha:
+          - 1e-05
+          - 0.0001
           - 0.001
           - 0.1
           - 1
-          - 10
-          - 100
           l1_ratio:
-          - 0
-          - 0.1
           - 0.5
           - 0.9
+          - 0.99
+          - 0.999
           - 1
           kfold_n_splits: 5
           scoring_function: r2
@@ -54,11 +54,11 @@ stages:
           hpo_metrics_path: reports/hpo-metrics.json
     outs:
     - path: models/model.pkl
-      md5: d00764067f824ff48599cb1e2f73c002
-      size: 6907
+      md5: 29f05c08f71f0d2bda1599710bba40f2
+      size: 7138
     - path: reports/hpo-metrics.json
-      md5: 1cf8f80e85cc567c5c621d63bfd01873
-      size: 7131
+      md5: 98c205fe4921199dd6f9f1d307b6377b
+      size: 7227
   evaluate:
     cmd: python -m src.evaluate --config=params.yaml
     deps:
@@ -66,8 +66,8 @@ stages:
       md5: 9837a9d5136087f500dd3f43ed4c97d7
       size: 401141
     - path: models/model.pkl
-      md5: d00764067f824ff48599cb1e2f73c002
-      size: 6907
+      md5: 29f05c08f71f0d2bda1599710bba40f2
+      size: 7138
     - path: src/evaluate.py
       md5: 88d2b8f031550a975d85de7a85a33826
       size: 1328
