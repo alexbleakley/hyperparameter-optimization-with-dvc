@@ -3,14 +3,13 @@ base:
 
 prepare:
   test_size: 0.2
-  trainset_path: "data/trainset.csv"
-  testset_path: "data/testset.csv"
+  trainset_path: data/trainset.csv
+  testset_path: data/testset.csv
 
 train:
   alpha: 1
   l1_ratio: 0.5
-  model_path: "models/model.pkl"
+  model_path: models/model.pkl
 
 evaluate:
-  metrics_path: "reports/metrics.json"
-  
+  metrics_path: reports/metrics.json
