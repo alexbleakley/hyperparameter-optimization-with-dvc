@@ -28,21 +28,29 @@ stages:
       md5: 0bca98cbda08b5d98f5ea2c3484c5ea6
       size: 1606831
     - path: src/train.py
-      md5: 5a9cd29d3cb8b59d48055beeed00ce43
-      size: 1310
+      md5: 7c8b33791903b87dca3cc0e8e723b090
+      size: 1879
     params:
       params.yaml:
         base:
           random_state: 42
         prepare.trainset_path: data/trainset.csv
         train:
-          alpha: 1
-          l1_ratio: 0.5
+          alpha:
+          - 1
+          l1_ratio:
+          - 0.5
+          kfold_n_splits: 5
+          scoring_function: r2
           model_path: models/model.pkl
+          hpo_metrics_path: reports/hpo-metrics.json
     outs:
     - path: models/model.pkl
-      md5: dc9f06fb47a71a75299a7e42d665cbf5
-      size: 1696
+      md5: 38731a1ca8c16ecc907f047fb0467e7f
+      size: 3880
+    - path: reports/hpo-metrics.json
+      md5: 9a20b941896ee9c73ac577cdebb66546
+      size: 572
   evaluate:
     cmd: python -m src.evaluate --config=params.yaml
     deps:
@@ -50,8 +58,8 @@ stages:
       md5: 9837a9d5136087f500dd3f43ed4c97d7
       size: 401141
     - path: models/model.pkl
-      md5: dc9f06fb47a71a75299a7e42d665cbf5
-      size: 1696
+      md5: 38731a1ca8c16ecc907f047fb0467e7f
+      size: 3880
     - path: src/evaluate.py
       md5: 88d2b8f031550a975d85de7a85a33826
       size: 1328

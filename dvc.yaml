@@ -22,6 +22,7 @@ stages:
     - train
     outs:
     - models/model.pkl
+    - reports/hpo-metrics.json
   
   evaluate:
     cmd: python -m src.evaluate --config=params.yaml
